@@ -512,4 +512,51 @@ class AuditReader
 
         return $result;
     }
+    
+    // PERSO
+        /**
+     * Returns the total number of revisions.
+     * 
+     * @return integer
+     */
+    public function findRevisionCount(){
+        $query = 'SELECT COUNT(id) FROM ' . $this->config->getRevisionTableName() . '';
+        return $this->em->getConnection()->fetchAll($query);
+    }
+
+    /**
+     * Find all revisions that were made by a specific user.
+     * THIS IS SUPER INSECURE, YOU BETTER KNOW WHAT YOU ARE DOIN'!
+     * 
+     * @param string $username
+     * @param integer $limit
+     * @param integer $offset
+     * @return Revision[]
+     */
+    public function findRevisionsHistoryPerUser($username, $limit, $offset){
+        
+        if($username == null){
+            throw new \Exception('missing parameter');
+        }
+        
+        $this->platform = $this->em->getConnection()->getDatabasePlatform();
+
+        $query = $this ->platform->modifyLimitQuery(
+            'SELECT * FROM ' . $this->config->getRevisionTableName() . ' WHERE username = "' .$username. '" ORDER BY id DESC ', $limit, $offset
+        );
+        $revisionsData = $this->em->getConnection()->fetchAll($query);
+
+        $revisions = array();
+        foreach ($revisionsData AS $row) {
+            $revisions[] = new Revision(
+                $row['id'],
+                \DateTime::createFromFormat($this->platform->getDateTimeFormatString(), $row['timestamp']),
+                $row['username']
+            );
+        }
+        
+        return $revisions;
+    }
+
+    
 }
