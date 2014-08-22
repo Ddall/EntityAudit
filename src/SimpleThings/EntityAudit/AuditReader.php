@@ -306,7 +306,7 @@ class AuditReader
      * Find all revisions that were made of entity class with given id.
      *
      * @param string $className
-     * @param mixed $id
+     * @param mixed $id audited entity id
      * @return Revision[]
      */
     public function findRevisions($className, $id)
