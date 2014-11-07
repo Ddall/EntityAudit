@@ -28,10 +28,26 @@ namespace SimpleThings\EntityAudit;
  */
 class Revision
 {
+    /**
+     * @var integer revision id
+     */
     private $rev;
+    
+    /**
+     * @var \DateTime
+     */
     private $timestamp;
+    
+    /**
+     * @var string username
+     */
     private $username;
 
+    /**
+     * @param integer $rev
+     * @param \DateTime $timestamp
+     * @param string $username
+     */
     function __construct($rev, $timestamp, $username)
     {
         $this->rev = $rev;
@@ -39,16 +55,25 @@ class Revision
         $this->username = $username;
     }
 
+    /**
+     * @return integer revision id
+     */
     public function getRev()
     {
         return $this->rev;
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getTimestamp()
     {
         return $this->timestamp;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername()
     {
         return $this->username;
